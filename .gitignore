@@ -7,7 +7,9 @@ tags
 *.log.gz
 *.orig
 
+tomcat.8080
 .gradle
+.idea
 
 # General build files
 **/build/*
