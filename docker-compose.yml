@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  api:
+    container_name: corda
+    build:
+      dockerfile: api.dockerfile
+    ports:
+      - 61000:61000
+    environment:
+      DB_HOST: db
+    depends_on:
+      - corda
+    links:
+      - corda:corda
+    mem_limit: 4096m
+
+# may use h2
+  corda:
+    container_name: corda
+    build:
+      dockerfile: corda.dockerfile
+    environment:
+      POSTGRES_PASSWORD: test
+    ports:
+      - 5432:5432
+    mem_limit: 300m
+
+  db:
+    container_name: db
+    build:
