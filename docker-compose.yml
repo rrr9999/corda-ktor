@@ -3,12 +3,11 @@ version: '3.3'
 services:
   api:
     container_name: corda
+    #    image: cordatest.azurecr.io/cordatest-api:dev
     build:
-      dockerfile: api.dockerfile
+      dockerfile: docker/api.dockerfile
     ports:
       - 61000:61000
-    environment:
-      DB_HOST: db
     depends_on:
       - corda
     links:
@@ -18,14 +17,24 @@ services:
 # may use h2
   corda:
     container_name: corda
+#    image: cordatest.azurecr.io/cordatest-corda:dev
     build:
-      dockerfile: corda.dockerfile
+      dockerfile: docker/corda.dockerfile
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
+    links:
+      - db:db
+    mem_limit: 4096m
+
+  db:
+    container_name: db
+#    image: cordatest.azurecr.io/cordatest-db:dev
+    build:
+      dockerfile: docker/db.dockerfile
     environment:
       POSTGRES_PASSWORD: test
     ports:
       - 5432:5432
     mem_limit: 300m
-
-  db:
-    container_name: db
-    build:

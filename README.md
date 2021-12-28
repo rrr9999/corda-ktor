@@ -11,7 +11,7 @@ In development using Corda 4 and IntelliJ 2021, there is a bug that code complet
 The bug is expected to be resolved in Corda 5. reference: [Intellij having trouble with code completion under Kotlin 1.2](https://stackoverflow.com/questions/69684997/intellij-having-trouble-with-code-completion-under-kotlin-1-2)
 
 ## Setup
-### start up with docker engine and docker-compose
+### Start up with docker engine and docker-compose
 run 3 corda nodes(include a notary) and client server of party_a 
 ```
 docker-compose up
@@ -44,7 +44,17 @@ after start corda nodes, run client applications
 ./gradlew runPartyBServer
 ```
 
-## when devMode=false in configuration file "node.conf"
-When devMode is false in configuration file "node.conf", we must sign the cordapps, workflows-1.0.jar and contracts-1.0.jar.
+## When devMode=false in configuration file "node.conf", we should sign CorDapp
+When devMode is false in configuration file "node.conf", we must sign the CorDapp, workflows-1.0.jar and contracts-1.0.jar. The way of creating keystore, read the following.
 
-key
+create private key in JKS format. replace the X500 name and password. 
+
+```
+keytool -keystore jarSignKeystore.jks -keyalg RSA -genkey -dname "OU=, O=, L=, C=" -storepass [password] -keypass [password] -alias cordapp-signer
+```
+
+migrate the JKS key to PKCS12(Public Key Cryptography Standard#12) format.
+
+```
+keytool -importkeystore -srckeystore jarSignKeystore.jks -destkeystore jarSignKeystore.pkcs12 -deststoretype pkcs12
+```
