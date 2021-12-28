@@ -23,10 +23,6 @@ import com.template.states.TemplateState
 import net.corda.core.contracts.requireThat
 import net.corda.core.identity.AbstractParty
 
-
-// *********
-// * Flows *
-// *********
 @InitiatingFlow
 @StartableByRPC
 class Initiator(private val receiver: Party) : FlowLogic<SignedTransaction>() {
